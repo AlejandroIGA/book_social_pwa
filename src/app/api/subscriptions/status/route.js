@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   const session = await getSession();
   if (!session) {
-    return NextResponse.json({ isSubscribed: false });
+    return NextResponse.json({ isSubscribed: false, msg: "no session created" });
   }
   
   const { searchParams } = new URL(req.url);

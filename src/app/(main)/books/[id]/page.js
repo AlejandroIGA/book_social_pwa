@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import BookActions from '@/components/BookActions';
 import ReviewForm from '@/components/ReviewForm';
 import { getSession } from '@/lib/session';
+import { query } from '@/lib/db';
 import SubscribeToAuthorButton from '@/components/SubscribeToAuthorButton';
 
 async function getBookDetails(id) {
@@ -37,10 +38,17 @@ export default async function BookDetailsPage({ params }) {
   ]);
 
 async function getSubscriptionStatus(authorId) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscriptions/status?authorId=${authorId}`);
-    if (!res.ok) return false;
-    const data = await res.json();
-    return data.isSubscribed;
+  const session = await getSession();
+  if (!session) {
+    return false;
+  }
+
+  const result = await query({
+    query: "SELECT id FROM AuthorSubscription WHERE id_user = ? AND id_author = ?",
+    values: [session.userId, authorId],
+  });
+
+  return result.length > 0;
 }
 
   return (

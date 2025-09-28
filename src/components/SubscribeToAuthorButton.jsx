@@ -71,7 +71,7 @@ export default function SubscribeToAuthorButton({ authorId, isInitiallySubscribe
     setLoading(false);
   };
 
-  const buttonText = isSubscribed ? '🔕 Dejar de seguir' : '🔔 Seguir a este autor';
+  const buttonText = isSubscribed ? 'Dejar de seguir' : 'Seguir a este autor';
   const buttonAction = isSubscribed ? handleUnsubscribe : handleSubscribe;
   const buttonClass = isSubscribed ? "bg-gray-500 hover:bg-gray-600" : "bg-purple-600 hover:bg-purple-700";
 
