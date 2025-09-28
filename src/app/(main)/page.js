@@ -1,13 +1,9 @@
-// app/page.js
 import BookCard from "@/components/bookCard";
 import BookGrid from "@/components/BookGrid";
 import Link from 'next/link';
 
-// Función para obtener los datos desde nuestra API
 async function getBooks() {
-  // Usamos la URL completa porque la llamada se hace desde el servidor
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/books`, {
-    // Revalidar cada hora para no tener datos muy viejos
     next: { revalidate: 3600 } 
   });
 
@@ -15,6 +11,7 @@ async function getBooks() {
     throw new Error('Failed to fetch books');
   }
   const data = await res.json();
+  console.log(data);
   return data.books;
 }
 
@@ -29,7 +26,7 @@ export default async function Home() {
           <Link href={`/books/${book.id}`} key={book.id}>
             <BookCard 
               name={book.name}
-              author={book.author}
+              author={book.authorName}
               editorial={book.editorial}
               genre={book.genre}
               // Asumimos que la columna en la BD se llama 'image_url'

@@ -3,7 +3,7 @@ import { query } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import webPush from "web-push";
 
-async function sendAuthorNotifications(authorId, bookName, authorName) {
+async function sendAuthorNotifications(authorId, bookName) {
   try {
     const subscriptions = await query({
       query: "SELECT endpoint, p256dh, auth FROM AuthorSubscription WHERE id_author = ?",
@@ -40,15 +40,11 @@ async function sendAuthorNotifications(authorId, bookName, authorName) {
 }
 
 export async function POST(req) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ message: "No autorizado." }, { status: 401 });
-  }
 
   try {
-    const { name, authorId, genre, editorial, editorial_review } = await req.json();
+    const { name, authorId, genre, editorial, editorial_review} = await req.json();
 
-    if (!name || !authorId || !authorName) {
+    if (!name || !authorId) {
       return NextResponse.json({ message: "Faltan datos requeridos." }, { status: 400 });
     }
 
@@ -60,7 +56,7 @@ export async function POST(req) {
   values: [name, authorId, genre, editorial, editorial_review],
 });
 
-    sendAuthorNotifications(authorId, name, authorName);
+    sendAuthorNotifications(authorId, name);
 
     return NextResponse.json(
       { message: "Libro añadido con éxito.", bookId: result.insertId },
