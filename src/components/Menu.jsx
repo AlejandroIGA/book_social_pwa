@@ -15,7 +15,7 @@ export default function Menu({ session }) {
 
   const navLinks = [
     { name: 'Inicio', href: '/' },
-    ...(session ? [{ name: 'Mi Librería', href: '/library' }] : []),
+    ...(session ? [{ name: 'Mi Librería', href: '/library' }, { name: 'Mi Perfil', href: '/profile' }] : []),
   ];
 
   return (

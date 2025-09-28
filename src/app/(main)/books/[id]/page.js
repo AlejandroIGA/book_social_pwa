@@ -22,21 +22,6 @@ async function getBookReviews(id) {
     return data.reviews;
 }
 
-export default async function BookDetailsPage({ params }) {
-  const { id } = params;
-  
-  const book = await getBookDetails(id);
-
-  if (!book) {
-    notFound();
-  }
-  
-  const [session, reviews, isSubscribed] = await Promise.all([
-    getSession(),
-    getBookReviews(id),
-    getSubscriptionStatus(book.authorId)
-  ]);
-
 async function getSubscriptionStatus(authorId) {
   const session = await getSession();
   if (!session) {
@@ -51,6 +36,36 @@ async function getSubscriptionStatus(authorId) {
   return result.length > 0;
 }
 
+async function getLibraryStatus(bookId) {
+  const session = await getSession();
+  if (!session) {
+    return false;
+  }
+  const result = await query({
+    query: "SELECT id FROM Library WHERE id_user = ? AND id_book = ?",
+    values: [session.userId, bookId],
+  });
+  return result.length > 0;
+}
+
+export default async function BookDetailsPage({ params }) {
+  const { id } = params;
+  
+  const book = await getBookDetails(id);
+
+  if (!book) {
+    notFound();
+  }
+  
+  const [session, reviews, isSubscribed, isInLibrary] = await Promise.all([
+    getSession(),
+    getBookReviews(id),
+    getSubscriptionStatus(book.authorId),
+    getLibraryStatus(book.id)
+  ]);
+
+
+
   return (
     <div className="container mx-auto p-4 md:p-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -63,7 +78,10 @@ async function getSubscriptionStatus(authorId) {
                     className="object-cover"
                 />
             </div>
-            <BookActions bookId={book.id} />
+            <BookActions 
+              bookId={book.id} 
+              isInitiallyInLibrary={isInLibrary} 
+            />
         </div>
 
         <div className="md:col-span-2">
