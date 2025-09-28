@@ -73,7 +73,7 @@ export default function SubscribeToAuthorButton({ authorId, isInitiallySubscribe
 
   const buttonText = isSubscribed ? 'Dejar de seguir' : 'Seguir a este autor';
   const buttonAction = isSubscribed ? handleUnsubscribe : handleSubscribe;
-  const buttonClass = isSubscribed ? "bg-gray-500 hover:bg-gray-600" : "bg-purple-600 hover:bg-purple-700";
+  const buttonClass = isSubscribed ? "bg-gray-500 hover:bg-gray-600" : "bg-blue-600 hover:bg-blue-700";
 
   return (
     <div>
