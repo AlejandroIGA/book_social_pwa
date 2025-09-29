@@ -1,14 +1,11 @@
-// app/api/books/add/route.js
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
 import webPush from "web-push";
 
-// --- VERSIÓN FINAL DE LA FUNCIÓN DE NOTIFICACIONES ---
 async function sendAuthorNotifications(authorId, bookName) {
   try {
     console.log(`[NOTIFY] Iniciando proceso para autor ID: ${authorId}`);
 
-    // -> 1. Busca todos los USUARIOS que siguen a este autor.
     const followers = await query({
       query: "SELECT id_user FROM UserAuthorFollow WHERE id_author = ?",
       values: [authorId],
@@ -19,7 +16,6 @@ async function sendAuthorNotifications(authorId, bookName) {
       return;
     }
 
-    // -> 2. Extrae los IDs de los seguidores en un array (ej: [1, 5, 12])
     const followerIds = followers.map(f => f.id_user);
     console.log(`[NOTIFY] IDs de seguidores encontrados: ${followerIds.join(', ')}`);
 
@@ -31,8 +27,6 @@ async function sendAuthorNotifications(authorId, bookName) {
       WHERE id_user IN (${placeholders})
     `;
       
-    // -> 3. Busca todos los DISPOSITIVOS registrados de esos seguidores.
-    // La consulta `IN (?)` permite buscar múltiples IDs a la vez.
     const subscriptions = await query({
       query: subscriptionsQuery,
       values: followerIds,
@@ -44,11 +38,9 @@ async function sendAuthorNotifications(authorId, bookName) {
     }
     console.log(`[NOTIFY] Se encontraron ${subscriptions.length} dispositivos para notificar.`);
 
-    // Obtenemos el nombre del autor para el mensaje
     const authorResult = await query({ query: "SELECT name FROM Author WHERE id = ?", values: [authorId] });
     const authorName = authorResult.length > 0 ? authorResult[0].name : 'Autor Desconocido';
 
-    // -> 4. Envía la notificación a cada dispositivo encontrado.
     webPush.setVapidDetails(
       process.env.VAPID_SUBJECT,
       process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
@@ -78,7 +70,6 @@ async function sendAuthorNotifications(authorId, bookName) {
   }
 }
 
-// --- API POST (con la llamada correcta) ---
 export async function POST(req) {
   try {
     const { name, authorId, genre, editorial, editorial_review } = await req.json();
@@ -95,7 +86,6 @@ export async function POST(req) {
       values: [name, authorId, genre, editorial, editorial_review],
     });
 
-    // La llamada no necesita cambiar, la lógica interna de la función es la que mejoró.
     sendAuthorNotifications(authorId, name);
 
     return NextResponse.json(
