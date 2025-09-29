@@ -9,17 +9,17 @@ export async function POST(req) {
   }
 
   try {
-    const { subscription, authorId } = await req.json();
+    const { subscription } = await req.json();
     const { endpoint, keys } = subscription;
     const { p256dh, auth } = keys;
 
     await query({
       query: `
-        INSERT INTO AuthorSubscription (id_user, id_author, endpoint, p256dh, auth)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO devicesubscription (id_user, endpoint, p256dh, auth)
+        VALUES (?, ?, ?, ?) -- -> CORREGIDO: Ahora hay 4 placeholders
         ON DUPLICATE KEY UPDATE endpoint = VALUES(endpoint), p256dh = VALUES(p256dh), auth = VALUES(auth)
       `,
-      values: [session.userId, authorId, endpoint, p256dh, auth],
+      values: [session.userId, endpoint, p256dh, auth],
     });
 
     return NextResponse.json({ message: "Suscripción guardada con éxito." }, { status: 201 });

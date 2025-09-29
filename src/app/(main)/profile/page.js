@@ -3,6 +3,7 @@ import { query } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Image from 'next/image';
 import CameraCapture from "@/components/CameraCapture";
+import NotificationManager from "@/components/NotificationManager";
 
 async function getUserProfile() {
   const session = await getSession();
@@ -44,6 +45,11 @@ export default async function ProfilePage() {
         <div className="mt-6 border-t pt-6">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Actualizar foto de perfil</h2>
           <CameraCapture />
+        </div>
+
+        <div className="mt-6 border-t pt-6">
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">Notificaciones Push</h2>
+          <NotificationManager />
         </div>
       </div>
     </div>

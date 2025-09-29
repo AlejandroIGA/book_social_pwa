@@ -5,7 +5,7 @@ import BookActions from '@/components/BookActions';
 import ReviewForm from '@/components/ReviewForm';
 import { getSession } from '@/lib/session';
 import { query } from '@/lib/db';
-import SubscribeToAuthorButton from '@/components/SubscribeToAuthorButton';
+import FollowAuthorButton from '@/components/FollowAuthorButton';
 
 async function getBookDetails(id) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/books/${id}`);
@@ -48,6 +48,17 @@ async function getLibraryStatus(bookId) {
   return result.length > 0;
 }
 
+async function getFollowStatus(authorId) {
+  const session = await getSession();
+  if (!session) return false;
+
+  const result = await query({
+    query: "SELECT id FROM UserAuthorFollow WHERE id_user = ? AND id_author = ?",
+    values: [session.userId, authorId],
+  });
+  return result.length > 0;
+}
+
 export default async function BookDetailsPage({ params }) {
   const { id } = params;
   
@@ -57,11 +68,11 @@ export default async function BookDetailsPage({ params }) {
     notFound();
   }
   
-  const [session, reviews, isSubscribed, isInLibrary] = await Promise.all([
+  const [session, reviews, isInLibrary, isFollowing] = await Promise.all([
     getSession(),
     getBookReviews(id),
-    getSubscriptionStatus(book.authorId),
-    getLibraryStatus(book.id)
+    getLibraryStatus(book.id),
+    getFollowStatus(book.authorId)
   ]);
 
 
@@ -90,11 +101,12 @@ export default async function BookDetailsPage({ params }) {
             <div className="flex items-center gap-4 mb-4">
                 <p className="text-xl text-gray-600">por {book.authorName || 'Autor Desconocido'}</p>
                 {session && (
-                    <SubscribeToAuthorButton 
-                        authorId={book.authorId} 
-                        isInitiallySubscribed={isSubscribed}
-                    />
-                )}
+            <FollowAuthorButton 
+              authorId={book.authorId} 
+              isInitiallyFollowing={isFollowing}
+            />
+          )}
+
             </div>
             
             <div className="space-y-4 text-lg">
