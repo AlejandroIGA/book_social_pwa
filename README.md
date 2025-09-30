@@ -41,6 +41,7 @@ PWA y Notificaciones: Service Workers, Web Push API, Background Sync API
 Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
 
 Prerrequisitos
+
 Node.js (versión 18.x o superior)
 
 npm
@@ -49,6 +50,7 @@ Un servidor de MySQL funcionando.
 
 # 1. Clonar el Repositorio
 git clone https://github.com/AlejandroIGA/book_social_pwa.git
+
 cd book-social-pwa
 
 # 2. Instalar Dependencias
@@ -58,6 +60,7 @@ npm install
 Abre tu cliente de MySQL y ejecuta el siguiente script SQL para crear todas las tablas necesarias:
 
 -- Tabla de Usuarios
+
 CREATE TABLE User (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -67,12 +70,14 @@ CREATE TABLE User (
 );
 
 -- Tabla de Autores
+
 CREATE TABLE Author (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Tabla de Libros
+
 CREATE TABLE Book (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -84,6 +89,7 @@ CREATE TABLE Book (
 );
 
 -- Tabla de Reseñas
+
 CREATE TABLE Review (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_book INT NOT NULL,
@@ -94,6 +100,7 @@ CREATE TABLE Review (
 );
 
 -- Tabla de Librería Personal
+
 CREATE TABLE Library (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_book INT NOT NULL,
@@ -104,7 +111,8 @@ CREATE TABLE Library (
     FOREIGN KEY (id_user) REFERENCES User(id) ON DELETE CASCADE
 );
 
--- Tabla para seguir autores (Intención del usuario)
+-- Tabla para seguir autores
+
 CREATE TABLE UserAuthorFollow (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_user INT NOT NULL,
@@ -114,7 +122,8 @@ CREATE TABLE UserAuthorFollow (
     UNIQUE KEY user_author_follow_unique (id_user, id_author)
 );
 
--- Tabla para registrar dispositivos (Permiso técnico)
+-- Tabla para registrar dispositivos
+
 CREATE TABLE DeviceSubscription (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_user INT NOT NULL,
@@ -126,26 +135,37 @@ CREATE TABLE DeviceSubscription (
 );
 
 # 4. Configurar Variables de Entorno
+
 Crea un archivo llamado .env.local en la raíz del proyecto y añade las siguientes variables.
 
 # Base de Datos MySQL
+
 DB_HOST=localhost
+
 DB_PORT=3306
+
 DB_USER=tu_usuario_mysql
+
 DB_PASSWORD=tu_contraseña_mysql
+
 DB_DATABASE=nombre_de_tu_bd
 
 # Autenticación JWT
+
 JWT_SECRET=genera_una_clave_secreta_larga_y_aleatoria_aqui
 
 # Notificaciones Push (VAPID Keys)
+
 Genera estas claves con el comando: npx web-push generate-vapid-keys
 
 NEXT_PUBLIC_VAPID_PUBLIC_KEY="PEGA_TU_CLAVE_PUBLICA_AQUI"
+
 VAPID_PRIVATE_KEY="PEGA_TU_CLAVE_PRIVADA_AQUI"
+
 VAPID_SUBJECT="mailto:tuemail@ejemplo.com"
 
 # 5. Ejecutar la Aplicación
+
 Una vez configurado todo, inicia el servidor de desarrollo:
 
 npm run dev
@@ -153,6 +173,7 @@ npm run dev
 La aplicación estará disponible en http://localhost:3000.
 
 # Scripts Disponibles
+
 npm run dev: Inicia el servidor en modo de desarrollo.
 
 npm run build: Compila la aplicación para producción.
