@@ -1,9 +1,9 @@
-Book Social - Progressive Web App
+# Book Social - Progressive Web App
 Book Social es una moderna Progressive Web App (PWA) diseñada para amantes de los libros. Permite a los usuarios descubrir nuevos libros, gestionar su biblioteca personal, escribir reseñas y seguir a sus autores favoritos para recibir notificaciones de sus nuevos lanzamientos.
 
 La aplicación está construida con un enfoque "offline-first", permitiendo a los usuarios interactuar con el contenido incluso sin una conexión a internet estable, y sincronizando sus acciones automáticamente cuando la conexión se restablece.
 
-Características Principales
+# Características Principales
 Experiencia PWA Completa: Instala la aplicación en cualquier dispositivo (móvil o escritorio) para una experiencia nativa, con pantalla de splash y acceso offline.
 
 Autenticación de Usuarios: Sistema seguro de registro e inicio de sesión con tokens JWT.
@@ -24,7 +24,7 @@ Perfil de Usuario Personalizable: Actualiza tu foto de perfil usando la cámara 
 
 Diseño Responsivo: Interfaz moderna construida con Tailwind CSS, optimizada para cualquier tamaño de pantalla.
 
-Tecnologías Utilizadas
+# Tecnologías Utilizadas
 Framework: Next.js (App Router)
 
 Librería Frontend: React
@@ -37,7 +37,7 @@ Autenticación: JSON Web Tokens (JWT), bcryptjs
 
 PWA y Notificaciones: Service Workers, Web Push API, Background Sync API
 
-Instalación y Puesta en Marcha
+# Instalación y Puesta en Marcha
 Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
 
 Prerrequisitos
@@ -47,14 +47,14 @@ npm
 
 Un servidor de MySQL funcionando.
 
-1. Clonar el Repositorio
-git clone <URL_DEL_REPOSITORIO>
+# 1. Clonar el Repositorio
+git clone https://github.com/AlejandroIGA/book_social_pwa.git
 cd book-social-pwa
 
-2. Instalar Dependencias
+# 2. Instalar Dependencias
 npm install
 
-3. Configurar la Base de Datos
+# 3. Configurar la Base de Datos
 Abre tu cliente de MySQL y ejecuta el siguiente script SQL para crear todas las tablas necesarias:
 
 -- Tabla de Usuarios
@@ -125,7 +125,7 @@ CREATE TABLE DeviceSubscription (
     UNIQUE KEY user_endpoint_unique (id_user, endpoint(255))
 );
 
-4. Configurar Variables de Entorno
+# 4. Configurar Variables de Entorno
 Crea un archivo llamado .env.local en la raíz del proyecto y añade las siguientes variables.
 
 # Base de Datos MySQL
@@ -139,19 +139,20 @@ DB_DATABASE=nombre_de_tu_bd
 JWT_SECRET=genera_una_clave_secreta_larga_y_aleatoria_aqui
 
 # Notificaciones Push (VAPID Keys)
-# Genera estas claves con el comando: npx web-push generate-vapid-keys
+Genera estas claves con el comando: npx web-push generate-vapid-keys
+
 NEXT_PUBLIC_VAPID_PUBLIC_KEY="PEGA_TU_CLAVE_PUBLICA_AQUI"
 VAPID_PRIVATE_KEY="PEGA_TU_CLAVE_PRIVADA_AQUI"
 VAPID_SUBJECT="mailto:tuemail@ejemplo.com"
 
-5. Ejecutar la Aplicación
+# 5. Ejecutar la Aplicación
 Una vez configurado todo, inicia el servidor de desarrollo:
 
 npm run dev
 
 La aplicación estará disponible en http://localhost:3000.
 
-Scripts Disponibles
+# Scripts Disponibles
 npm run dev: Inicia el servidor en modo de desarrollo.
 
 npm run build: Compila la aplicación para producción.
