@@ -48,6 +48,10 @@ npm
 
 Un servidor de MySQL funcionando.
 
+# Consideraciones
+
+Para este proyecto no se configuro un certificado SSL, en su lugar se utilizo ngrok, esto es importante ya que al relaizar las pruebas en un dispositivo móvil al no contar con un comunicación HTTPS la aplicación se ve limitada, por lo que, si se desean probar todas las funcionalidades de la aplicación en un dispositivo móvil se debe crear una conexión HTTPS con ayuda de ngrok que es la manera más rápida para realizar pruebas.
+
 # 1. Clonar el Repositorio
 git clone https://github.com/AlejandroIGA/book_social_pwa.git
 
